@@ -1,0 +1,10 @@
+E:\New folder\Projectkel7\ProjectKel7\ProjectKel7\bin\Debug\ProjectKel7.exe.config
+E:\New folder\Projectkel7\ProjectKel7\ProjectKel7\bin\Debug\ProjectKel7.exe
+E:\New folder\Projectkel7\ProjectKel7\ProjectKel7\bin\Debug\ProjectKel7.pdb
+E:\New folder\Projectkel7\ProjectKel7\ProjectKel7\bin\Debug\Newtonsoft.Json.dll
+E:\New folder\Projectkel7\ProjectKel7\ProjectKel7\bin\Debug\Newtonsoft.Json.xml
+E:\New folder\Projectkel7\ProjectKel7\ProjectKel7\obj\Debug\ChatServer.csproj.AssemblyReference.cache
+E:\New folder\Projectkel7\ProjectKel7\ProjectKel7\obj\Debug\ChatServer.csproj.CoreCompileInputs.cache
+E:\New folder\Projectkel7\ProjectKel7\ProjectKel7\obj\Debug\ChatServer.csproj.CopyComplete
+E:\New folder\Projectkel7\ProjectKel7\ProjectKel7\obj\Debug\ProjectKel7.exe
+E:\New folder\Projectkel7\ProjectKel7\ProjectKel7\obj\Debug\ProjectKel7.pdb

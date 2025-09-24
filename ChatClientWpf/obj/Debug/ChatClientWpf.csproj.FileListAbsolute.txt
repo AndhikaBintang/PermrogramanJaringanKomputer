@@ -1,0 +1,17 @@
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\bin\Debug\ChatClientWpf.exe.config
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\bin\Debug\ChatClientWpf.exe
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\bin\Debug\ChatClientWpf.pdb
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\bin\Debug\Newtonsoft.Json.dll
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\bin\Debug\Newtonsoft.Json.xml
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\ChatClientWpf.csproj.AssemblyReference.cache
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\MainWindow.baml
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\MainWindow.g.cs
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\App.g.cs
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\ChatClientWpf_MarkupCompile.cache
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\ChatClientWpf.g.resources
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\ChatClientWpf.Properties.Resources.resources
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\ChatClientWpf.csproj.GenerateResource.cache
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\ChatClientWpf.csproj.CoreCompileInputs.cache
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\ChatClientWpf.csproj.CopyComplete
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\ChatClientWpf.exe
+E:\New folder\Projectkel7\ProjectKel7\ChatClientWpf\obj\Debug\ChatClientWpf.pdb
