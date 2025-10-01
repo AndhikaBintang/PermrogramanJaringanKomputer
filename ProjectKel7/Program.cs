@@ -1,36 +1,35 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using ChatShared;
 
 namespace ChatServer
 {
-    public class ChatMessage
+    class Program
     {
-        public string type { get; set; }
-        public string from { get; set; }
-        public string to { get; set; }
-        public string text { get; set; }
-        public long ts { get; set; }
+        static async Task Main(string[] args)
+        {
+            var server = new ChatServerApp(5000);
+            var cts = new CancellationTokenSource();
+            _ = server.StartAsync(cts.Token);
+
+            Console.WriteLine("Press Enter to stop...");
+            Console.ReadLine();
+            cts.Cancel();
+        }
     }
 
-    class ClientInfo
-    {
-        public TcpClient Tcp { get; private set; }
-        public NetworkStream Stream { get { return Tcp.GetStream(); } }
-        public string Username { get; set; }
-        public ClientInfo(TcpClient tcp) { Tcp = tcp; }
-    }
-
-    class ChatServerApp
+    public class ChatServerApp
     {
         private readonly TcpListener _listener;
-        private readonly ConcurrentDictionary<string, ClientInfo> _clientsByName = new ConcurrentDictionary<string, ClientInfo>();
-        private readonly ConcurrentDictionary<TcpClient, ClientInfo> _clients = new ConcurrentDictionary<TcpClient, ClientInfo>();
+        private readonly Dictionary<string, TcpClient> _clients = new Dictionary<string, TcpClient>();
+        private readonly object _gate = new object();
 
         public ChatServerApp(int port)
         {
@@ -50,163 +49,180 @@ namespace ChatServer
                     tcp = await _listener.AcceptTcpClientAsync();
                 }
                 catch (ObjectDisposedException) { break; }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("[Server] Accept error: " + ex.Message);
-                    continue;
-                }
+                catch (Exception ex) { Console.WriteLine("[Server] Accept error: " + ex.Message); continue; }
 
-                if (tcp != null)
-                {
-                    Console.WriteLine("[Server] New connection");
-                    var ci = new ClientInfo(tcp);
-                    _clients.TryAdd(tcp, ci);
-                    Task.Run(() => HandleClientAsync(ci, ct));
-                }
+                _ = Task.Run(() => HandleClientAsync(tcp, ct));
             }
-
-            try { _listener.Stop(); } catch { }
         }
 
-        private async Task HandleClientAsync(ClientInfo ci, CancellationToken ct)
+        private async Task HandleClientAsync(TcpClient tcp, CancellationToken ct)
         {
-            var stream = ci.Stream;
+            string username = null;
+            NetworkStream stream = tcp.GetStream();
+
             try
             {
-                var join = await ReceiveMessageAsync(stream, ct);
-                if (join == null || join.type != "join")
-                {
-                    SafeClose(ci);
-                    return;
-                }
-
-                string desired = string.IsNullOrEmpty(join.from) ? "Anon" : join.from;
-                string username = desired;
-                int suffix = 1;
-                while (!_clientsByName.TryAdd(username, ci))
-                {
-                    username = desired + "_" + suffix++;
-                }
-                ci.Username = username;
-
-                Console.WriteLine("[Server] " + username + " joined");
-                await BroadcastAsync(new ChatMessage { type = "sys", from = "server", text = username + " joined", ts = Now() });
-
                 while (!ct.IsCancellationRequested)
                 {
-                    var msg = await ReceiveMessageAsync(stream, ct);
-                    if (msg == null) break;
+                    var msg = await ReadMessageAsync(stream, ct);
+                    if (msg == null) break; // client closed
 
-                    if (msg.type == "msg")
+                    if (msg.type == "join")
                     {
-                        var forward = new ChatMessage { type = "msg", from = ci.Username, text = msg.text, ts = Now() };
-                        await BroadcastAsync(forward);
-                        Console.WriteLine("[" + ci.Username + "] " + msg.text);
+                        username = MakeUniqueUsername(string.IsNullOrWhiteSpace(msg.from) ? "Anon" : msg.from);
+                        lock (_gate) { _clients[username] = tcp; }
+                        Console.WriteLine($"[Server] {username} joined");
+                        Log($"{username} joined");
+                        await BroadcastAsync(new ChatMessage { type = "sys", text = $"{username} joined", ts = Now() });
+                        await BroadcastUsersAsync();
+                    }
+                    else if (msg.type == "msg")
+                    {
+                        Console.WriteLine($"[{msg.from}] {msg.text}");
+                        Log($"[{msg.from}] {msg.text}");
+                        await BroadcastAsync(new ChatMessage { type = "msg", from = msg.from, text = msg.text, ts = Now() });
+                    }
+                    else if (msg.type == "pm")
+                    {
+                        if (!string.IsNullOrEmpty(msg.to))
+                        {
+                            TcpClient target = null;
+                            lock (_gate)
+                            {
+                                if (_clients.TryGetValue(msg.to, out var t)) target = t;
+                            }
+                            if (target != null)
+                            {
+                                await SendToAsync(target, new ChatMessage { type = "pm", from = msg.from, to = msg.to, text = msg.text, ts = Now() });
+                            }
+                        }
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("[Server] Client error: " + ex.Message);
-            }
+            catch (IOException) { /* connection broken */ }
+            catch (Exception ex) { Console.WriteLine("[Server] Error: " + ex.Message); }
             finally
             {
-                await OnClientDisconnect(ci);
-            }
-        }
-
-        private async Task OnClientDisconnect(ClientInfo ci)
-        {
-            if (ci == null) return;
-
-            _clients.TryRemove(ci.Tcp, out _);
-            if (!string.IsNullOrEmpty(ci.Username))
-                _clientsByName.TryRemove(ci.Username, out _);
-
-            await BroadcastAsync(new ChatMessage
-            {
-                type = "sys",
-                from = "server",
-                text = (ci.Username ?? "unknown") + " left",
-                ts = Now()
-            });
-
-            SafeClose(ci);
-        }
-
-        public async Task BroadcastAsync(ChatMessage msg)
-        {
-            byte[] data = Serialize(msg);
-            foreach (var kv in _clients)
-            {
-                try
+                if (!string.IsNullOrEmpty(username))
                 {
-                    await kv.Value.Stream.WriteAsync(data, 0, data.Length);
+                    lock (_gate) { if (_clients.ContainsKey(username)) _clients.Remove(username); }
+                    await BroadcastAsync(new ChatMessage { type = "sys", text = $"{username} left", ts = Now() });
+                    await BroadcastUsersAsync();
+                    Log($"{username} left");
                 }
-                catch { }
+                try { tcp.Close(); } catch { }
             }
         }
 
-        static long Now() { return DateTimeOffset.UtcNow.ToUnixTimeSeconds(); }
+        private string MakeUniqueUsername(string desired)
+        {
+            string name = desired;
+            int suffix = 1;
+            lock (_gate)
+            {
+                while (_clients.ContainsKey(name))
+                {
+                    name = desired + "_" + suffix++;
+                }
+            }
+            return name;
+        }
 
-        static byte[] Serialize(ChatMessage m)
+        private async Task BroadcastAsync(ChatMessage m)
+        {
+            byte[] buf = Serialize(m);
+            List<string> deadKeys = new List<string>();
+
+            lock (_gate)
+            {
+                foreach (var kv in _clients)
+                {
+                    try
+                    {
+                        var st = kv.Value.GetStream();
+                        st.Write(buf, 0, buf.Length);
+                    }
+                    catch
+                    {
+                        deadKeys.Add(kv.Key);
+                    }
+                }
+                foreach (var k in deadKeys) _clients.Remove(k);
+            }
+
+            await Task.CompletedTask;
+        }
+
+        private async Task SendToAsync(TcpClient tcp, ChatMessage m)
+        {
+            try
+            {
+                byte[] buf = Serialize(m);
+                tcp.GetStream().Write(buf, 0, buf.Length);
+            }
+            catch { /* ignore */ }
+            await Task.CompletedTask;
+        }
+
+        private async Task BroadcastUsersAsync()
+        {
+            string users;
+            lock (_gate) { users = string.Join(",", _clients.Keys); }
+            await BroadcastAsync(new ChatMessage { type = "users", text = users, ts = Now() });
+        }
+
+        // ---------- framing helpers ----------
+        private static byte[] Serialize(ChatMessage m)
         {
             string json = JsonConvert.SerializeObject(m);
             byte[] payload = Encoding.UTF8.GetBytes(json);
-            byte[] len = BitConverter.GetBytes(payload.Length);
+            byte[] len = BitConverter.GetBytes(payload.Length); // little-endian
             byte[] buf = new byte[4 + payload.Length];
             Buffer.BlockCopy(len, 0, buf, 0, 4);
             Buffer.BlockCopy(payload, 0, buf, 4, payload.Length);
             return buf;
         }
 
-        static async Task<ChatMessage> ReceiveMessageAsync(NetworkStream s, CancellationToken ct)
+        private static async Task<ChatMessage> ReadMessageAsync(NetworkStream s, CancellationToken ct)
         {
             byte[] lenBuf = new byte[4];
             int r = await ReadExactAsync(s, lenBuf, 0, 4, ct);
             if (r == 0) return null;
-
             int len = BitConverter.ToInt32(lenBuf, 0);
             if (len <= 0) return null;
-
             byte[] payload = new byte[len];
             r = await ReadExactAsync(s, payload, 0, len, ct);
             if (r == 0) return null;
-
             string json = Encoding.UTF8.GetString(payload);
-            try { return JsonConvert.DeserializeObject<ChatMessage>(json); }
-            catch { return null; }
+            try
+            {
+                var msg = JsonConvert.DeserializeObject<ChatMessage>(json);
+                return msg;
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine("[Server] Error parsing JSON: " + ex.Message);
+                return null;
+            }
         }
 
-        static async Task<int> ReadExactAsync(NetworkStream s, byte[] buf, int offset, int count, CancellationToken ct)
+        private static async Task<int> ReadExactAsync(NetworkStream s, byte[] buf, int offset, int count, CancellationToken ct)
         {
             int total = 0;
             while (total < count)
             {
-                int n = await s.ReadAsync(buf, offset + total, count - total);
+                int n = await s.ReadAsync(buf, offset + total, count - total, ct);
                 if (n == 0) return 0;
                 total += n;
             }
             return total;
         }
 
-        static void SafeClose(ClientInfo ci)
-        {
-            try { ci.Tcp.Close(); } catch { }
-        }
-    }
+        private static long Now() => DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-    class Program
-    {
-        static void Main()
+        private static void Log(string text)
         {
-            var server = new ChatServerApp(11111);
-            var cts = new CancellationTokenSource();
-            Task.Run(() => server.StartAsync(cts.Token));
-
-            Console.WriteLine("Press Enter to stop...");
-            Console.ReadLine();
-            cts.Cancel();
+            try { File.AppendAllText("server.log", $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {text}\n"); } catch { }
         }
     }
 }

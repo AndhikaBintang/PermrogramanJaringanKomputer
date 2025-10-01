@@ -1,28 +1,38 @@
 ﻿<Window x:Class="ChatClientWpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Chat Client" Height="450" Width="600">
-    <Grid Margin="8">
+        Title="Chat Client" Height="500" Width="800">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="104*"/>
+            <RowDefinition Height="93*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,8">
-            <TextBlock VerticalAlignment="Center">Server:</TextBlock>
-            <TextBox x:Name="TxtIP" Width="120" Margin="6,0,0,0" Text="127.0.0.1"/>
-            <TextBox x:Name="TxtPort" Width="60" Margin="6,0,0,0" Text="11111"/>
-            <TextBox x:Name="TxtUser" Width="120" Margin="12,0,0,0" Text="ClientA"/>
-            <Button x:Name="BtnConnect" Content="Connect" Margin="8,0,0,0" Click="BtnConnect_Click"/>
-            <Button x:Name="BtnDisconnect" Content="Disconnect" Margin="4,0,0,0" Click="BtnDisconnect_Click" IsEnabled="False"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,10">
+            <TextBox x:Name="txtIP" Width="120" Text="127.0.0.1" Margin="0,0,5,0"/>
+            <TextBox x:Name="txtPort" Width="60" Text="5000" Margin="0,0,5,0"/>
+            <TextBox x:Name="txtUsername" Width="100" Text="User" Margin="0,0,5,0"/>
+            <Button x:Name="btnConnect" Content="Connect" Width="80" Margin="0,0,5,0" Click="btnConnect_Click"/>
+            <Button x:Name="btnDisconnect" Content="Disconnect" Width="80" Margin="0,0,5,0" Click="btnDisconnect_Click"/>
+            <Button x:Name="btnTheme" Content="Switch Theme" Width="100" Margin="0,0,5,0" Click="btnTheme_Click"/>
         </StackPanel>
 
-        <ListBox x:Name="LstMessages" Grid.Row="1" />
+        <TextBox x:Name="chatBox" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Disabled"
+                 IsReadOnly="True" TextWrapping="Wrap" Grid.RowSpan="2"/>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,8,0,0">
-            <TextBox x:Name="TxtMessage" Width="440" Height="26" />
-            <Button x:Name="BtnSend" Content="Send" Width="80" Margin="8,0,0,0" Click="BtnSend_Click" IsEnabled="False"/>
+        <ListBox x:Name="userList" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" />
+
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,10,0,0">
+            <TextBox x:Name="txtMessage" Width="600" Height="30" Margin="0,0,5,0"/>
+            <Button x:Name="btnSend" Content="Send" Width="80" Click="btnSend_Click"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,0 +1,6 @@
+E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatShared\bin\Debug\ChatShared.dll
+E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatShared\bin\Debug\ChatShared.pdb
+E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatShared\obj\Debug\ChatShared.csproj.AssemblyReference.cache
+E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatShared\obj\Debug\ChatShared.csproj.CoreCompileInputs.cache
+E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatShared\obj\Debug\ChatShared.dll
+E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatShared\obj\Debug\ChatShared.pdb
