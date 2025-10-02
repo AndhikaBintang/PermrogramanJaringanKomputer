@@ -17,7 +17,6 @@ namespace ChatClientWpf
 
         public MainWindow()
         {
-            // Panggilan ini sangat penting untuk menghubungkan XAML dan C#
             InitializeComponent();
         }
 
@@ -82,13 +81,40 @@ namespace ChatClientWpf
         {
             if (!_connected || string.IsNullOrWhiteSpace(TxtMessage.Text)) return;
 
-            var msg = new ChatMessage
+            var text = TxtMessage.Text.Trim();
+            ChatMessage msg;
+
+            if (text.StartsWith("/w "))
             {
-                From = TxtUsername.Text,
-                Message = TxtMessage.Text,
-                Type = "chat",
-                Timestamp = DateTime.Now
-            };
+                var parts = text.Split(new[] { ' ' }, 3);
+                if (parts.Length >= 3)
+                {
+                    msg = new ChatMessage
+                    {
+                        From = TxtUsername.Text,
+                        To = parts[1],
+                        Message = parts[2],
+                        Type = "pm",
+                        Timestamp = DateTime.Now
+                    };
+                }
+                else
+                {
+                    AppendMessage("[SYSTEM] Format PM salah. Gunakan: /w <username> <pesan>");
+                    TxtMessage.Clear();
+                    return;
+                }
+            }
+            else
+            {
+                msg = new ChatMessage
+                {
+                    From = TxtUsername.Text,
+                    Message = text,
+                    Type = "chat",
+                    Timestamp = DateTime.Now
+                };
+            }
 
             SendMessage(msg);
             TxtMessage.Clear();
@@ -137,6 +163,10 @@ namespace ChatClientWpf
                                         UserList.Items.Add(u.Trim());
                                 }
                             }
+                            else if (msg.Type == "pm")
+                            {
+                                AppendMessage($"[{timestamp}] (PM) {msg.From} -> {msg.To}: {msg.Message}");
+                            }
                             else
                             {
                                 AppendMessage($"[{timestamp}] {msg.From}: {msg.Message}");
@@ -147,7 +177,7 @@ namespace ChatClientWpf
             }
             catch
             {
-                // Mengabaikan eror saat koneksi ditutup paksa
+                // abaikan error saat client mati
             }
         }
 

@@ -48,7 +48,7 @@ namespace ChatServer
                 {
                     byte[] buffer = new byte[4096];
                     int byteCount = stream.Read(buffer, 0, buffer.Length);
-                    if (byteCount == 0) break; // Klien disconnect secara normal
+                    if (byteCount == 0) break; // Klien disconnect
 
                     string data = Encoding.UTF8.GetString(buffer, 0, byteCount);
                     ChatMessage msg = JsonConvert.DeserializeObject<ChatMessage>(data);
@@ -87,16 +87,20 @@ namespace ChatServer
                             Console.WriteLine($"[{msg.Timestamp:HH:mm:ss}] [SYSTEM] {msg.Message}");
                             Broadcast(msg);
                         }
+                        else if (msg.Type == "pm")
+                        {
+                            Console.WriteLine($"[{msg.Timestamp:HH:mm:ss}] (PM) {msg.From} -> {msg.To}: {msg.Message}");
+                            SendPrivate(msg);
+                        }
                     }
                 }
             }
             catch (Exception)
             {
-                // Klien disconnect paksa (misal: menutup jendela)
+                // abaikan error
             }
             finally
             {
-                // Hapus klien dan broadcast pembaruan
                 lock (_lock)
                 {
                     if (_clients.ContainsKey(client))
@@ -114,26 +118,22 @@ namespace ChatServer
                     Timestamp = DateTime.Now
                 });
 
-                BroadcastUsers(); // Kirim daftar pengguna terbaru ke semua klien yang tersisa
+                BroadcastUsers();
                 Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] {username} disconnected");
             }
         }
 
-        // --- PERUBAHAN UTAMA DI SINI ---
-        // Metode Broadcast yang lebih aman untuk menghindari masalah konkurensi.
         private static void Broadcast(ChatMessage msg)
         {
             string json = JsonConvert.SerializeObject(msg);
             byte[] buffer = Encoding.UTF8.GetBytes(json);
             List<TcpClient> clientsCopy;
 
-            // 1. Salin daftar klien di dalam lock untuk menghindari perubahan saat iterasi
             lock (_lock)
             {
                 clientsCopy = new List<TcpClient>(_clients.Keys);
             }
 
-            // 2. Iterasi pada salinan daftar klien
             foreach (var c in clientsCopy)
             {
                 try
@@ -141,10 +141,7 @@ namespace ChatServer
                     NetworkStream stream = c.GetStream();
                     stream.Write(buffer, 0, buffer.Length);
                 }
-                catch
-                {
-                    // Jika gagal mengirim ke satu klien, abaikan dan lanjutkan ke klien berikutnya
-                }
+                catch { }
             }
         }
 
@@ -153,7 +150,6 @@ namespace ChatServer
             string allUsers;
             lock (_lock)
             {
-                // Filter untuk memastikan username tidak kosong sebelum digabung
                 allUsers = string.Join(",", _clients.Values.Where(u => !string.IsNullOrEmpty(u)));
             }
 
@@ -166,6 +162,41 @@ namespace ChatServer
             };
 
             Broadcast(msg);
+        }
+
+        private static void SendPrivate(ChatMessage msg)
+        {
+            string json = JsonConvert.SerializeObject(msg);
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+
+            TcpClient targetClient = null;
+            TcpClient senderClient = null;
+
+            lock (_lock)
+            {
+                targetClient = _clients.FirstOrDefault(x => x.Value == msg.To).Key;
+                senderClient = _clients.FirstOrDefault(x => x.Value == msg.From).Key;
+            }
+
+            if (targetClient != null)
+            {
+                try
+                {
+                    NetworkStream stream = targetClient.GetStream();
+                    stream.Write(buffer, 0, buffer.Length);
+                }
+                catch { }
+            }
+
+            if (senderClient != null)
+            {
+                try
+                {
+                    NetworkStream stream = senderClient.GetStream();
+                    stream.Write(buffer, 0, buffer.Length);
+                }
+                catch { }
+            }
         }
     }
 }
