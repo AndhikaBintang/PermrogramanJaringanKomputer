@@ -34,3 +34,16 @@ C:\Users\Mimzha\Documents\Visual Studio 2022\Projects\PermrogramanJaringanKomput
 C:\Users\Mimzha\Documents\Visual Studio 2022\Projects\PermrogramanJaringanKomputer\ProjectKel7\obj\Debug\ChatServer.csproj.Up2Date
 C:\Users\Mimzha\Documents\Visual Studio 2022\Projects\PermrogramanJaringanKomputer\ProjectKel7\obj\Debug\ProjectKel7.exe
 C:\Users\Mimzha\Documents\Visual Studio 2022\Projects\PermrogramanJaringanKomputer\ProjectKel7\obj\Debug\ProjectKel7.pdb
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\bin\Debug\ProjectKel7.exe.config
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\bin\Debug\ProjectKel7.exe
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\bin\Debug\ProjectKel7.pdb
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\bin\Debug\ChatShared.dll
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\bin\Debug\ChatShared.pdb
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\obj\Debug\ChatServer.csproj.AssemblyReference.cache
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\obj\Debug\ProjectKel7.exe.config
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\obj\Debug\ChatServer.csproj.CoreCompileInputs.cache
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\obj\Debug\ChatServer.csproj.Up2Date
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\obj\Debug\ProjectKel7.exe
+C:\Users\Tulalit\Documents\GitHub\PermrogramanJaringanKomputer\ProjectKel7\obj\Debug\ProjectKel7.pdb

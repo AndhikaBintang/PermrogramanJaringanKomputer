@@ -53,4 +53,11 @@
         <Setter Property="Foreground" Value="{StaticResource ControlForeground}"/>
         <Setter Property="BorderBrush" Value="Gray"/>
     </Style>
+
+    <!-- GroupBox -->
+    <Style TargetType="GroupBox">
+        <Setter Property="Background" Value="{StaticResource ControlBackground}"/>
+        <Setter Property="Foreground" Value="{StaticResource ControlForeground}"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+    </Style>
 </ResourceDictionary>
