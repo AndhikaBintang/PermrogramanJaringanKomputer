@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -12,8 +13,8 @@ namespace ChatServer
     class Program
     {
         private static TcpListener _listener;
-        private static Dictionary<TcpClient, string> _clients = new Dictionary<TcpClient, string>();
-        private static object _lock = new object();
+        private static readonly Dictionary<TcpClient, string> _clients = new Dictionary<TcpClient, string>();
+        private static readonly object _lock = new object();
 
         static void Main(string[] args)
         {
@@ -26,7 +27,10 @@ namespace ChatServer
             while (true)
             {
                 var client = _listener.AcceptTcpClient();
-                lock (_lock) _clients.Add(client, ""); // kosong dulu, diisi setelah join
+                lock (_lock)
+                {
+                    _clients.Add(client, ""); // Username diisi setelah join
+                }
                 Thread t = new Thread(HandleClient);
                 t.Start(client);
             }
@@ -44,7 +48,7 @@ namespace ChatServer
                 {
                     byte[] buffer = new byte[4096];
                     int byteCount = stream.Read(buffer, 0, buffer.Length);
-                    if (byteCount == 0) break;
+                    if (byteCount == 0) break; // Klien disconnect secara normal
 
                     string data = Encoding.UTF8.GetString(buffer, 0, byteCount);
                     ChatMessage msg = JsonConvert.DeserializeObject<ChatMessage>(data);
@@ -56,7 +60,10 @@ namespace ChatServer
                         if (msg.Type == "join")
                         {
                             username = msg.From;
-                            lock (_lock) _clients[client] = username;
+                            lock (_lock)
+                            {
+                                _clients[client] = username;
+                            }
 
                             Console.WriteLine($"[{msg.Timestamp:HH:mm:ss}] {username} joined");
 
@@ -83,13 +90,19 @@ namespace ChatServer
                     }
                 }
             }
-            catch { }
+            catch (Exception)
+            {
+                // Klien disconnect paksa (misal: menutup jendela)
+            }
             finally
             {
+                // Hapus klien dan broadcast pembaruan
                 lock (_lock)
                 {
                     if (_clients.ContainsKey(client))
+                    {
                         _clients.Remove(client);
+                    }
                 }
                 client.Close();
 
@@ -101,26 +114,36 @@ namespace ChatServer
                     Timestamp = DateTime.Now
                 });
 
-                BroadcastUsers();
+                BroadcastUsers(); // Kirim daftar pengguna terbaru ke semua klien yang tersisa
                 Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] {username} disconnected");
             }
         }
 
+        // --- PERUBAHAN UTAMA DI SINI ---
+        // Metode Broadcast yang lebih aman untuk menghindari masalah konkurensi.
         private static void Broadcast(ChatMessage msg)
         {
             string json = JsonConvert.SerializeObject(msg);
             byte[] buffer = Encoding.UTF8.GetBytes(json);
+            List<TcpClient> clientsCopy;
 
+            // 1. Salin daftar klien di dalam lock untuk menghindari perubahan saat iterasi
             lock (_lock)
             {
-                foreach (var c in _clients.Keys)
+                clientsCopy = new List<TcpClient>(_clients.Keys);
+            }
+
+            // 2. Iterasi pada salinan daftar klien
+            foreach (var c in clientsCopy)
+            {
+                try
                 {
-                    try
-                    {
-                        NetworkStream stream = c.GetStream();
-                        stream.Write(buffer, 0, buffer.Length);
-                    }
-                    catch { }
+                    NetworkStream stream = c.GetStream();
+                    stream.Write(buffer, 0, buffer.Length);
+                }
+                catch
+                {
+                    // Jika gagal mengirim ke satu klien, abaikan dan lanjutkan ke klien berikutnya
                 }
             }
         }
@@ -130,7 +153,8 @@ namespace ChatServer
             string allUsers;
             lock (_lock)
             {
-                allUsers = string.Join(",", _clients.Values);
+                // Filter untuk memastikan username tidak kosong sebelum digabung
+                allUsers = string.Join(",", _clients.Values.Where(u => !string.IsNullOrEmpty(u)));
             }
 
             var msg = new ChatMessage

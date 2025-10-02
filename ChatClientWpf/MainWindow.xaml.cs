@@ -17,42 +17,44 @@ namespace ChatClientWpf
 
         public MainWindow()
         {
+            // Panggilan ini sangat penting untuk menghubungkan XAML dan C#
             InitializeComponent();
         }
 
-        private void btnConnect_Click(object sender, RoutedEventArgs e)
+        private void btnConnectDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (!_connected)
             {
-                _client = new TcpClient(TxtIp.Text, int.Parse(TxtPort.Text));
-                _stream = _client.GetStream();
-                _connected = true;
-
-                AppendMessage($"[SYSTEM] Connected to server.");
-
-                // Kirim join message
-                var joinMsg = new ChatMessage
+                try
                 {
-                    From = TxtUsername.Text,
-                    Message = $"{TxtUsername.Text} joined",
-                    Type = "join",
-                    Timestamp = DateTime.Now
-                };
-                SendMessage(joinMsg);
+                    _client = new TcpClient(TxtIp.Text, int.Parse(TxtPort.Text));
+                    _stream = _client.GetStream();
+                    _connected = true;
 
-                // mulai thread terima pesan
-                _receiveThread = new Thread(ReceiveMessages);
-                _receiveThread.Start();
-            }
-            catch (Exception ex)
-            {
-                AppendMessage($"[ERROR] {ex.Message}");
-            }
-        }
+                    btnConnectDisconnect.Content = "Disconnect";
+                    TxtIp.IsEnabled = false;
+                    TxtPort.IsEnabled = false;
+                    TxtUsername.IsEnabled = false;
+                    AppendMessage($"[SYSTEM] Connected to server.");
 
-        private void btnDisconnect_Click(object sender, RoutedEventArgs e)
-        {
-            if (_connected)
+                    _receiveThread = new Thread(ReceiveMessages);
+                    _receiveThread.Start();
+
+                    var joinMsg = new ChatMessage
+                    {
+                        From = TxtUsername.Text,
+                        Message = $"{TxtUsername.Text} joined",
+                        Type = "join",
+                        Timestamp = DateTime.Now
+                    };
+                    SendMessage(joinMsg);
+                }
+                catch (Exception ex)
+                {
+                    AppendMessage($"[ERROR] Could not connect: {ex.Message}");
+                }
+            }
+            else
             {
                 var msg = new ChatMessage
                 {
@@ -64,16 +66,21 @@ namespace ChatClientWpf
                 SendMessage(msg);
 
                 _connected = false;
-                _stream.Close();
-                _client.Close();
+                _stream?.Close();
+                _client?.Close();
 
+                btnConnectDisconnect.Content = "Connect";
+                TxtIp.IsEnabled = true;
+                TxtPort.IsEnabled = true;
+                TxtUsername.IsEnabled = true;
+                UserList.Items.Clear();
                 AppendMessage($"[SYSTEM] Disconnected.");
             }
         }
 
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
-            if (!_connected) return;
+            if (!_connected || string.IsNullOrWhiteSpace(TxtMessage.Text)) return;
 
             var msg = new ChatMessage
             {
@@ -140,7 +147,7 @@ namespace ChatClientWpf
             }
             catch
             {
-                // ignore error jika client disconnect
+                // Mengabaikan eror saat koneksi ditutup paksa
             }
         }
 
@@ -161,16 +168,14 @@ namespace ChatClientWpf
             {
                 Application.Current.Resources.MergedDictionaries.Clear();
                 Application.Current.Resources.MergedDictionaries.Add(
-                    new ResourceDictionary { Source = new Uri("Themes/LightTheme.xaml", UriKind.Relative) }
-                );
+                    new ResourceDictionary { Source = new Uri("Themes/LightTheme.xaml", UriKind.Relative) });
                 AppendMessage("[SYSTEM] Theme changed to LightTheme");
             }
             else
             {
                 Application.Current.Resources.MergedDictionaries.Clear();
                 Application.Current.Resources.MergedDictionaries.Add(
-                    new ResourceDictionary { Source = new Uri("Themes/DarkTheme.xaml", UriKind.Relative) }
-                );
+                    new ResourceDictionary { Source = new Uri("Themes/DarkTheme.xaml", UriKind.Relative) });
                 AppendMessage("[SYSTEM] Theme changed to DarkTheme");
             }
         }

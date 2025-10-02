@@ -1,34 +1,34 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\",
+  "WorkspaceRootPath": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\chatclientwpf\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|solutionrelative:chatclientwpf\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BB62CC9F-90D0-4101-9C71-28BF956C5BB2}|ProjectKel7\\ChatServer.csproj|E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\projectkel7\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BB62CC9F-90D0-4101-9C71-28BF956C5BB2}|ProjectKel7\\ChatServer.csproj|solutionrelative:projectkel7\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|e:\\new folder\\projectkel7\\projectkel7\\permrogramanjaringankomputer\\chatclientwpf\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\chatclientwpf\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|solutionrelative:chatclientwpf\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{17159511-1122-45F2-9A25-20EFC93035B8}|ChatShared\\ChatShared.csproj|E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\chatshared\\chatmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{17159511-1122-45F2-9A25-20EFC93035B8}|ChatShared\\ChatShared.csproj|solutionrelative:chatshared\\chatmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\chatclientwpf\\themes\\darktheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|solutionrelative:chatclientwpf\\themes\\darktheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\chatclientwpf\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\chatclientwpf\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|solutionrelative:chatclientwpf\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\chatclientwpf\\themes\\lighttheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{BB62CC9F-90D0-4101-9C71-28BF956C5BB2}|ProjectKel7\\ChatServer.csproj|C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\projectkel7\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BB62CC9F-90D0-4101-9C71-28BF956C5BB2}|ProjectKel7\\ChatServer.csproj|solutionrelative:projectkel7\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|c:\\users\\mimzha\\documents\\visual studio 2022\\projects\\permrogramanjaringankomputer\\chatclientwpf\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|solutionrelative:chatclientwpf\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{17159511-1122-45F2-9A25-20EFC93035B8}|ChatShared\\ChatShared.csproj|C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\chatshared\\chatmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{17159511-1122-45F2-9A25-20EFC93035B8}|ChatShared\\ChatShared.csproj|solutionrelative:chatshared\\chatmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\chatclientwpf\\themes\\lighttheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|solutionrelative:chatclientwpf\\themes\\lighttheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\chatclientwpf\\themes\\darktheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{06E26607-9DA4-4BF0-9A6A-F6EE2429AB8A}|ChatClientWpf\\ChatClientWpf.csproj|solutionrelative:chatclientwpf\\themes\\darktheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,13 +42,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
-              "DocumentMoniker": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ProjectKel7\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ProjectKel7\\Program.cs",
               "RelativeDocumentMoniker": "ProjectKel7\\Program.cs",
-              "ToolTip": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ProjectKel7\\Program.cs",
+              "ToolTip": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ProjectKel7\\Program.cs",
               "RelativeToolTip": "ProjectKel7\\Program.cs",
-              "ViewState": "AgIAAHcAAAAAAAAAAAAmwJMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJAAAAAAAAAAAAAQwKoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-01T04:47:43.135Z",
               "IsPinned": true,
@@ -56,23 +56,24 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatClientWpf\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "ChatClientWpf\\MainWindow.xaml",
-              "ToolTip": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatClientWpf\\MainWindow.xaml",
-              "RelativeToolTip": "ChatClientWpf\\MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-01T04:58:46.675Z",
+              "DocumentIndex": 3,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatClientWpf\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "ChatClientWpf\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatClientWpf\\MainWindow.xaml.cs",
+              "RelativeToolTip": "ChatClientWpf\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAJsAAAAAAAAAAAAAwLQAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-01T04:59:03.716Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "App.xaml",
-              "DocumentMoniker": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatClientWpf\\App.xaml",
+              "DocumentMoniker": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatClientWpf\\App.xaml",
               "RelativeDocumentMoniker": "ChatClientWpf\\App.xaml",
-              "ToolTip": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatClientWpf\\App.xaml",
+              "ToolTip": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatClientWpf\\App.xaml",
               "RelativeToolTip": "ChatClientWpf\\App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-10-01T05:24:34.741Z",
@@ -80,11 +81,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "DarkTheme.xaml",
-              "DocumentMoniker": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatClientWpf\\Themes\\DarkTheme.xaml",
+              "DocumentMoniker": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatClientWpf\\Themes\\DarkTheme.xaml",
               "RelativeDocumentMoniker": "ChatClientWpf\\Themes\\DarkTheme.xaml",
-              "ToolTip": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatClientWpf\\Themes\\DarkTheme.xaml",
+              "ToolTip": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatClientWpf\\Themes\\DarkTheme.xaml",
               "RelativeToolTip": "ChatClientWpf\\Themes\\DarkTheme.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-10-01T05:23:22.868Z",
@@ -92,35 +93,35 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "LightTheme.xaml",
-              "DocumentMoniker": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatClientWpf\\Themes\\LightTheme.xaml",
+              "DocumentMoniker": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatClientWpf\\Themes\\LightTheme.xaml",
               "RelativeDocumentMoniker": "ChatClientWpf\\Themes\\LightTheme.xaml",
-              "ToolTip": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatClientWpf\\Themes\\LightTheme.xaml",
+              "ToolTip": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatClientWpf\\Themes\\LightTheme.xaml",
               "RelativeToolTip": "ChatClientWpf\\Themes\\LightTheme.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-01T05:22:49.764Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatClientWpf\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "ChatClientWpf\\MainWindow.xaml.cs",
-              "ToolTip": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatClientWpf\\MainWindow.xaml.cs",
-              "RelativeToolTip": "ChatClientWpf\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAJYAAAAAAAAAAAAmwLIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T04:59:03.716Z",
+              "WhenOpened": "2025-10-01T05:22:49.764Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatClientWpf\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "ChatClientWpf\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatClientWpf\\MainWindow.xaml*",
+              "RelativeToolTip": "ChatClientWpf\\MainWindow.xaml*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-10-01T04:58:46.675Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "ChatMessage.cs",
-              "DocumentMoniker": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatShared\\ChatMessage.cs",
+              "DocumentMoniker": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatShared\\ChatMessage.cs",
               "RelativeDocumentMoniker": "ChatShared\\ChatMessage.cs",
-              "ToolTip": "E:\\New folder\\Projectkel7\\ProjectKel7\\PermrogramanJaringanKomputer\\ChatShared\\ChatMessage.cs",
+              "ToolTip": "C:\\Users\\Mimzha\\Documents\\Visual Studio 2022\\Projects\\PermrogramanJaringanKomputer\\ChatShared\\ChatMessage.cs",
               "RelativeToolTip": "ChatShared\\ChatMessage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
