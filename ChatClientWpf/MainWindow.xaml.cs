@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows;
 using Newtonsoft.Json;
 using ChatShared;
+using System.IO;   // <-- penting untuk baca/tulis file
 
 namespace ChatClientWpf
 {
@@ -14,10 +15,14 @@ namespace ChatClientWpf
         private NetworkStream _stream;
         private Thread _receiveThread;
         private bool _connected = false;
+        private const string ChatLogFile = "chatlog.txt"; // file untuk simpan riwayat
 
         public MainWindow()
         {
             InitializeComponent();
+
+            // Saat aplikasi dibuka → load chat lama
+            LoadChatHistory();
         }
 
         private void btnConnectDisconnect_Click(object sender, RoutedEventArgs e)
@@ -81,40 +86,13 @@ namespace ChatClientWpf
         {
             if (!_connected || string.IsNullOrWhiteSpace(TxtMessage.Text)) return;
 
-            var text = TxtMessage.Text.Trim();
-            ChatMessage msg;
-
-            if (text.StartsWith("/w "))
+            var msg = new ChatMessage
             {
-                var parts = text.Split(new[] { ' ' }, 3);
-                if (parts.Length >= 3)
-                {
-                    msg = new ChatMessage
-                    {
-                        From = TxtUsername.Text,
-                        To = parts[1],
-                        Message = parts[2],
-                        Type = "pm",
-                        Timestamp = DateTime.Now
-                    };
-                }
-                else
-                {
-                    AppendMessage("[SYSTEM] Format PM salah. Gunakan: /w <username> <pesan>");
-                    TxtMessage.Clear();
-                    return;
-                }
-            }
-            else
-            {
-                msg = new ChatMessage
-                {
-                    From = TxtUsername.Text,
-                    Message = text,
-                    Type = "chat",
-                    Timestamp = DateTime.Now
-                };
-            }
+                From = TxtUsername.Text,
+                Message = TxtMessage.Text,
+                Type = "chat",
+                Timestamp = DateTime.Now
+            };
 
             SendMessage(msg);
             TxtMessage.Clear();
@@ -156,16 +134,11 @@ namespace ChatClientWpf
                             if (msg.Type == "users")
                             {
                                 UserList.Items.Clear();
-                                var users = msg.Message.Split(',');
-                                foreach (var u in users)
+                                foreach (var u in msg.Message.Split(','))
                                 {
                                     if (!string.IsNullOrWhiteSpace(u))
                                         UserList.Items.Add(u.Trim());
                                 }
-                            }
-                            else if (msg.Type == "pm")
-                            {
-                                AppendMessage($"[{timestamp}] (PM) {msg.From} -> {msg.To}: {msg.Message}");
                             }
                             else
                             {
@@ -177,7 +150,7 @@ namespace ChatClientWpf
             }
             catch
             {
-                // abaikan error saat client mati
+                // Abaikan error saat disconnect
             }
         }
 
@@ -187,7 +160,23 @@ namespace ChatClientWpf
             {
                 ChatBox.AppendText(message + Environment.NewLine);
                 ChatBox.ScrollToEnd();
+
+                // Simpan juga ke file lokal
+                File.AppendAllText(ChatLogFile, message + Environment.NewLine);
             });
+        }
+
+        private void LoadChatHistory()
+        {
+            if (File.Exists(ChatLogFile))
+            {
+                string[] lines = File.ReadAllLines(ChatLogFile);
+                foreach (var line in lines)
+                {
+                    ChatBox.AppendText(line + Environment.NewLine);
+                }
+                ChatBox.ScrollToEnd();
+            }
         }
 
         private void btnTheme_Click(object sender, RoutedEventArgs e)

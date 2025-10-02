@@ -7,7 +7,7 @@ namespace ChatShared
         public string From { get; set; }
         public string Message { get; set; }
         public string Type { get; set; }   // "join", "chat", "system"
-        public string To { get; set; }        // Target user (jika PM)
+        public string To { get; set; }     // Target user (jika PM)
 
         // Otomatis isi waktu ketika objek dibuat
         public DateTime Timestamp { get; set; } = DateTime.Now;
