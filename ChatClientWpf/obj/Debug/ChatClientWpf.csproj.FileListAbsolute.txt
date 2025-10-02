@@ -29,7 +29,6 @@ E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf
 E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\obj\Debug\ChatClientWpf.Properties.Resources.resources
 E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\obj\Debug\ChatClientWpf.csproj.GenerateResource.cache
 E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\obj\Debug\ChatClientWpf.csproj.CoreCompileInputs.cache
-E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\obj\Debug\ChatClientWpf.csproj.CopyComplete
 E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\obj\Debug\ChatClientWpf.exe
 E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\obj\Debug\ChatClientWpf.pdb
 E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\obj\Debug\Themes\DarkTheme.baml
@@ -37,3 +36,5 @@ E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf
 E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\obj\Debug\App.baml
 E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\bin\Debug\ChatShared.dll
 E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\bin\Debug\ChatShared.pdb
+E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\obj\Debug\ChatClientWpf.exe.config
+E:\New folder\Projectkel7\ProjectKel7\PermrogramanJaringanKomputer\ChatClientWpf\obj\Debug\ChatClie.33C4603E.Up2Date

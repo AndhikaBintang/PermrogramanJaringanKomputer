@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
 using ChatShared;
-using System.Net.Sockets;
 
 namespace ChatClientWpf
 {
@@ -13,202 +12,167 @@ namespace ChatClientWpf
     {
         private TcpClient _client;
         private NetworkStream _stream;
-        private CancellationTokenSource _cts;
-        private string _username;
+        private Thread _receiveThread;
+        private bool _connected = false;
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private async void btnConnect_Click(object sender, RoutedEventArgs e)
+        private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                string ip = txtIP.Text.Trim();
-                int port = int.Parse(txtPort.Text.Trim());
-                _username = txtUsername.Text.Trim();
-
-                _client = new TcpClient();
-                await _client.ConnectAsync(ip, port);
+                _client = new TcpClient(TxtIp.Text, int.Parse(TxtPort.Text));
                 _stream = _client.GetStream();
+                _connected = true;
 
-                AppendChat("[SYSTEM] Connected to server.");
+                AppendMessage($"[SYSTEM] Connected to server.");
 
-                _cts = new CancellationTokenSource();
-                _ = Task.Run(() => ReceiveLoop(_cts.Token));
+                // Kirim join message
+                var joinMsg = new ChatMessage
+                {
+                    From = TxtUsername.Text,
+                    Message = $"{TxtUsername.Text} joined",
+                    Type = "join",
+                    Timestamp = DateTime.Now
+                };
+                SendMessage(joinMsg);
 
-                // send join message (length-prefixed JSON)
-                await SendObjectAsync(new ChatMessage { type = "join", from = _username });
+                // mulai thread terima pesan
+                _receiveThread = new Thread(ReceiveMessages);
+                _receiveThread.Start();
             }
             catch (Exception ex)
             {
-                AppendChat("[ERROR] " + ex.Message);
+                AppendMessage($"[ERROR] {ex.Message}");
             }
         }
 
-        private async void btnDisconnect_Click(object sender, RoutedEventArgs e)
+        private void btnDisconnect_Click(object sender, RoutedEventArgs e)
+        {
+            if (_connected)
+            {
+                var msg = new ChatMessage
+                {
+                    From = TxtUsername.Text,
+                    Message = $"{TxtUsername.Text} disconnected",
+                    Type = "system",
+                    Timestamp = DateTime.Now
+                };
+                SendMessage(msg);
+
+                _connected = false;
+                _stream.Close();
+                _client.Close();
+
+                AppendMessage($"[SYSTEM] Disconnected.");
+            }
+        }
+
+        private void btnSend_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_connected) return;
+
+            var msg = new ChatMessage
+            {
+                From = TxtUsername.Text,
+                Message = TxtMessage.Text,
+                Type = "chat",
+                Timestamp = DateTime.Now
+            };
+
+            SendMessage(msg);
+            TxtMessage.Clear();
+        }
+
+        private void SendMessage(ChatMessage msg)
         {
             try
             {
-                if (_client != null && _client.Connected)
-                {
-                    await SendObjectAsync(new ChatMessage { type = "leave", from = _username });
-                }
-            }
-            catch { }
-            finally
-            {
-                try { _cts?.Cancel(); _stream?.Close(); _client?.Close(); } catch { }
-                AppendChat("[SYSTEM] Disconnected.");
-            }
-        }
-
-        private async void btnSend_Click(object sender, RoutedEventArgs e)
-        {
-            string text = txtMessage.Text.Trim();
-            if (string.IsNullOrEmpty(text)) return;
-
-            if (text.StartsWith("/w "))
-            {
-                var parts = text.Split(new[] { ' ' }, 3);
-                if (parts.Length >= 3)
-                {
-                    var pm = new ChatMessage { type = "pm", from = _username, to = parts[1], text = parts[2] };
-                    await SendObjectAsync(pm);
-                    AppendChat($"[PM to {parts[1]}] {parts[2]}");
-                }
-            }
-            else
-            {
-                var m = new ChatMessage { type = "msg", from = _username, text = text };
-                await SendObjectAsync(m);
-            }
-
-            txtMessage.Clear();
-        }
-
-        private async Task SendObjectAsync(ChatMessage msg)
-        {
-            if (_stream == null) return;
-            string json = JsonConvert.SerializeObject(msg);
-            byte[] payload = Encoding.UTF8.GetBytes(json);
-            byte[] len = BitConverter.GetBytes(payload.Length);
-            try
-            {
-                await _stream.WriteAsync(len, 0, 4);
-                await _stream.WriteAsync(payload, 0, payload.Length);
+                string json = JsonConvert.SerializeObject(msg);
+                byte[] buffer = Encoding.UTF8.GetBytes(json);
+                _stream.Write(buffer, 0, buffer.Length);
             }
             catch (Exception ex)
             {
-                AppendChat("[ERROR] Send failed: " + ex.Message);
+                AppendMessage($"[ERROR] {ex.Message}");
             }
         }
 
-        private async Task ReceiveLoop(CancellationToken ct)
+        private void ReceiveMessages()
         {
             try
             {
-                while (!ct.IsCancellationRequested)
+                while (_connected)
                 {
-                    // read length
-                    byte[] lenBuf = new byte[4];
-                    int r = await ReadExactAsync(_stream, lenBuf, 0, 4, ct);
-                    if (r == 0) break;
-                    int len = BitConverter.ToInt32(lenBuf, 0);
-                    if (len <= 0) continue;
+                    byte[] buffer = new byte[4096];
+                    int byteCount = _stream.Read(buffer, 0, buffer.Length);
+                    if (byteCount == 0) continue;
 
-                    byte[] payload = new byte[len];
-                    r = await ReadExactAsync(_stream, payload, 0, len, ct);
-                    if (r == 0) break;
+                    string data = Encoding.UTF8.GetString(buffer, 0, byteCount);
+                    var msg = JsonConvert.DeserializeObject<ChatMessage>(data);
 
-                    string json = Encoding.UTF8.GetString(payload);
-                    ChatMessage msg = null;
-                    try { msg = JsonConvert.DeserializeObject<ChatMessage>(json); }
-                    catch (JsonException)
-                    {
-                        AppendChat("[ERROR] Received invalid JSON");
-                        continue;
-                    }
-
-                    if (msg == null) continue;
-
-                    // handle
-                    if (msg.type == "users")
+                    if (msg != null)
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            userList.Items.Clear();
-                            if (!string.IsNullOrEmpty(msg.text))
+                            string timestamp = msg.Timestamp.ToString("HH:mm:ss");
+
+                            if (msg.Type == "users")
                             {
-                                string[] arr = msg.text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                foreach (var u in arr) userList.Items.Add(u);
+                                UserList.Items.Clear();
+                                var users = msg.Message.Split(',');
+                                foreach (var u in users)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(u))
+                                        UserList.Items.Add(u.Trim());
+                                }
+                            }
+                            else
+                            {
+                                AppendMessage($"[{timestamp}] {msg.From}: {msg.Message}");
                             }
                         });
                     }
-                    else if (msg.type == "msg")
-                    {
-                        AppendChat($"[{msg.from}] {msg.text}");
-                    }
-                    else if (msg.type == "pm")
-                    {
-                        AppendChat($"[PM from {msg.from}] {msg.text}");
-                    }
-                    else if (msg.type == "sys")
-                    {
-                        AppendChat($"[SYSTEM] {msg.text}");
-                    }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                AppendChat("[SYSTEM] Receive loop ended: " + ex.Message);
-            }
-            finally
-            {
-                Dispatcher.Invoke(() => AppendChat("[SYSTEM] Connection closed."));
+                // ignore error jika client disconnect
             }
         }
 
-        private static async Task<int> ReadExactAsync(NetworkStream s, byte[] buf, int offset, int count, CancellationToken ct)
-        {
-            int total = 0;
-            while (total < count)
-            {
-                int read = await s.ReadAsync(buf, offset + total, count - total, ct);
-                if (read == 0) return 0;
-                total += read;
-            }
-            return total;
-        }
-
-        private void AppendChat(string text)
+        private void AppendMessage(string message)
         {
             Dispatcher.Invoke(() =>
             {
-                chatBox.AppendText(text + Environment.NewLine);
-                chatBox.ScrollToEnd();
+                ChatBox.AppendText(message + Environment.NewLine);
+                ChatBox.ScrollToEnd();
             });
         }
 
-        // theme button behavior (simple swap using merged dictionaries)
         private void btnTheme_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (Application.Current.Resources.MergedDictionaries.Count > 0 &&
+                Application.Current.Resources.MergedDictionaries[0].Source != null &&
+                Application.Current.Resources.MergedDictionaries[0].Source.OriginalString.Contains("DarkTheme.xaml"))
             {
-                var md = Application.Current.Resources.MergedDictionaries;
-                if (md.Count > 0 && md[0].Source != null && md[0].Source.OriginalString.Contains("LightTheme"))
-                {
-                    md.Clear();
-                    md.Add(new System.Windows.ResourceDictionary { Source = new Uri("Themes/DarkTheme.xaml", UriKind.Relative) });
-                }
-                else
-                {
-                    md.Clear();
-                    md.Add(new System.Windows.ResourceDictionary { Source = new Uri("Themes/LightTheme.xaml", UriKind.Relative) });
-                }
+                Application.Current.Resources.MergedDictionaries.Clear();
+                Application.Current.Resources.MergedDictionaries.Add(
+                    new ResourceDictionary { Source = new Uri("Themes/LightTheme.xaml", UriKind.Relative) }
+                );
+                AppendMessage("[SYSTEM] Theme changed to LightTheme");
             }
-            catch { }
+            else
+            {
+                Application.Current.Resources.MergedDictionaries.Clear();
+                Application.Current.Resources.MergedDictionaries.Add(
+                    new ResourceDictionary { Source = new Uri("Themes/DarkTheme.xaml", UriKind.Relative) }
+                );
+                AppendMessage("[SYSTEM] Theme changed to DarkTheme");
+            }
         }
     }
 }
